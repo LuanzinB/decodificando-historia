@@ -1,0 +1,1240 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Decodificando Historias</title>
+
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .aventura {
+            max-width: 850px;
+            margin: 40px auto;
+            text-align: justify;
+            font-size: 18px;
+            line-height: 1.8;
+        }
+
+        .aventura p {
+            margin-bottom: 18px;
+            text-indent: 30px;
+        }
+
+        .aventura h2 {
+            text-align: center;
+            margin-top: 45px;
+            margin-bottom: 30px;
+        }
+        
+        .botao-menu {
+            display: block;
+            width: 100%;
+            max-width: 600px;
+            margin: 15px auto;
+            padding: 16px;
+            background-color: black;
+            color: white;
+            border: 1px solid grey;
+            border-radius: 8px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+
+        }
+
+        
+        .botao-menu[hidden] {
+            display: none;
+        
+        }
+
+
+         .botao-menu:hover {
+            background-color: grey;
+        }
+
+         .botao-voltar {
+            display: inline-block;
+            margin: 15px 0;
+            padding: 10px 16px;
+            background-color: black;
+            color: white;
+            border: 1px solid grey;
+            border-radius: 6px;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+         .botao-menu:focus-visible,
+         .botao-voltar:focus-visible {
+            outline: 2px solid white;
+            outline-offset: 3px;
+        }
+
+         #leitor {
+            max-width: 850px;
+            margin: 30px auto;
+            text-align: left;
+        }
+
+         #leitor h2 {
+            text-align: center;
+        }
+         
+        #conteudo-capitulo {
+            max-width: 850px;
+            margin: 30px auto;
+            text-align: justify;
+            font-size: 18px;
+            line-height: 1.8;
+        }
+
+        #conteudo-capitulo p {
+            margin-bottom: 18px;
+            text-indent: 30px;
+        }
+        
+        .rodape-direitos {
+            margin-top: 50px;
+            padding: 20px;
+            border-top: 1px solid grey;
+            color: silver;
+            font-size: 13px;
+            text-align: center;
+        }
+        
+        .rodape-direitos p {
+            margin: 8px 0;
+        }
+        
+        .historia-em-breve {
+            background-color: black;
+            color: grey;
+            border: 1px dashed grey;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px auto;
+            max-width: 600px;
+            text-align: center;
+            opacity: 0.6;
+            cursor: not-allowed;
+            user-select: none;
+        }
+        
+        .historia-em-breve h3 {
+            margin-top: 0;
+            color: silver;
+        }
+    
+        .historia-em-breve p {
+            margin-bottom: 0;
+            font-size: 14px;
+        }
+
+        .proximo-capitulo {
+            margin-top: 40px;
+            padding: 16px;
+            border: 2px dashed grey;
+            border-radius: 12px;
+            background-color: black;
+            color: grey;
+            text-align: center;
+        }
+        
+        .proximo-capitulo h3 {
+            margin-top: 0;
+            color: white;
+            font-size: 20px;
+        }
+
+        .proximo-capitulo p {
+            margin-bottom: 0;
+            color: silver;
+        }
+
+    </style>
+
+</head>
+
+<body>
+    <h1>Decodificando Historias</h1>
+
+    <p>Aprendendo a Programar e a Criar Histórias.</p>
+
+    <h2>Meus objetivos</h2>
+
+    <p>Criar histórias envolventes em um site que eu mesmo vou desenvolver.</p>
+
+    
+<div id="inicio">
+    <h1>Historias:</h1>
+
+    <p>Escolha uma história para começar a ler.</p>
+
+    <button class="botao-menu" type="button"
+        onclick="abrirHistoria()">
+        Não Existem Heróis
+    </button>
+    
+    <div class="historia-em-breve" aria-disabled="true">
+        <h3>Mais histórias em breve...</h3>
+        <p>Novas histórias serão adicionadas futuramente.</p>
+    </div>
+
+</div>
+
+<div id="sumario" hidden>
+    <button class="botao-voltar" type="button"
+        onclick="voltarInicio()">
+        ← Voltar às histórias
+    </button>
+
+    <h1>Não Existem Heróis</h1>
+    <h2>Sumário</h2>
+
+    <div id="lista-capitulos"></div>
+</div>
+
+<div id="leitor" hidden>
+    <button class="botao-voltar" type="button"
+        onclick="voltarSumario()">
+        ← Voltar aos capítulos
+    </button>
+
+    <div id="conteudo-capitulo"></div>
+
+    
+    <div id="navegacao-capitulos">
+    <button id="capitulo-anterior" class="botao-menu"></button>
+
+    <button id="proximo-capitulo" class="botao-menu"></button>
+    </div>
+
+    <div id="aviso-proximo-capitulo"></div>
+
+    <button class="botao-voltar" type="button"
+        onclick="voltarSumario()">
+        Voltar ao sumário
+    </button>
+</div>
+
+<div id="texto-original" hidden>
+
+PRÓLOGO
+
+Em um mundo onde todos têm superpoderes e não existe nenhum super-herói, a monotonia da falta de atitude das pessoas me irrita. Cada nova geração nasce com habilidades sempre superiores à anterior — nós chamamos essas habilidades de Virtudes. Habilidades que nos dão a capacidade de fazer inúmeras coisas, cada um com uma característica. Seja superforça ou até mesmo parar o tempo, no meu mundo cada pessoa nasce com uma "arma colada na mão" e é ensinada que isso é uma coisa a ser ignorada.
+
+Mas não comigo. Não na minha vez.
+
+Eu sou a pessoa mais forte que conheço, seja na família, na escola ou entre amigos. Vou mostrar para esse mundo o que tanto eu quanto qualquer outro podemos fazer. Não é só coisa de quadrinhos e televisão — e eu vou mostrar pra eles. Quero orgulhar meu pai e toda a minha geração, mas para isso preciso melhorar. Preciso ser superior a qualquer outra pessoa, virtude ou até mesmo armas criadas pelo homem. Só assim vou mudar o mundo: sendo a mais forte.
+Meu nome é Lívia, e essa é a história de como eu mudei a minha realidade e a do meu mundo como um todo.
+
+Capítulo 1: Aprendiz
+Primeiro dia de aula e esse pátio parece cada vez menor a cada dia que passa. O ensino médio passou voando; esse terceiro e último ano não vai ser diferente. Sou literalmente a aluna com as melhores notas, a melhor avaliação geral da região e, apesar de eles não considerarem isso, eu também sou a mais forte e habilidosa. Até os professores aqui são uns fracotes. Não suporto ouvir cada um deles que passa por mim dizendo: "Bom dia, Lívia."
+
+— Ah, vão pro inferno! — pensei.
+
+Me dá até vergonha de ver pessoas com o dobro da minha idade, homens feitos, que não têm sequer a metade da força de uma garota de 17 anos como eu. Nasci com uma Virtude que amplifica tudo em meu corpo, dando-me força, velocidade, resistência e uma melhora significativa nos meus sentidos. Graças a ela, hoje em dia não preciso estudar muito para aprender nem me esforçar muito para ganhar de ninguém em qualquer esporte. Tento ser uma inspiração para todos usarem suas Virtudes, me esforcei pra caralho para aperfeiçoar a minha, mas isso ninguém vê. Eles apenas me veem como uma garota mimada e arrogante que nasceu com uma Virtude que faz tudo por mim. Mas eu não sou diferente deles — eu apenas dei valor ao que realmente tem valor e que eles, por bel-prazer, escolheram ignorar.
+
+Esse ano finalmente vou ter matéria de combate real. Uma matéria de fachada criada há uns 5 anos pelo governo para dizer que está ensinando os mais jovens a usar seus dons e a se proteger de possíveis agressores. Mas é uma mentira sem tamanho. Se isso fosse verdade, haveria cursos técnicos ou superiores para aperfeiçoar o uso de nossas habilidades e, por fim, uma profissão com esse intuito. Mas caso alguém tenha esse pensamento, só vai levar no máximo a ser policial ou, nos melhores casos, servir no exército — que, no fim, faz com que você seja apenas mais uma marionete na engrenagem do sistema.
+
+Mas comigo vai ser diferente. Vou obrigá-los a subir o nível. Vou mostrar pra eles o que é um conflito de verdade. Vai ser um máximo: eu, uma aluna, mostrando para mais um professor como realmente se faz.
+
+— Lívia, você já chegou. — ouvi aquela voz doce.
+
+Era Anna, uma amiga minha que havia acabado de se matricular na minha escola e estava no primeiro ano. Esguia, baixinha, cabelos loiros — era fácil perdê-la em uma multidão. Éramos basicamente opostas, afinal eu era bem mais alta, atlética, de cabelos castanhos-escuros. Apesar de termos o mesmo tom de pele, era nítido que eu tomava bem mais sol que ela.
+
+— Você falou que ia passar lá em casa pra me buscar, nem apareceu, né? — ela falava em tom de lamento. — Ei, eu tô falando com você.
+
+Apesar de nos conhecermos desde os meus 10 anos, eu nunca a considerei realmente minha amiga. Para ela, nós somos melhores amigas; mas pra mim, nós somos apenas rivais. A Virtude da Anna permite acelerar o corpo dela em velocidades realmente assombrosas. E apesar de seu jeito calmo e tranquilo, ela pode despertar um medo genuíno em qualquer um muito rapidamente, literalmente. Nós só lutamos como treino — um O.V, como fizemos, umas duas vezes — e, sinceramente, agradeço por ela não ligar muito pra Virtude dela, porque se ela treinasse o mesmo tanto que eu, não sei se poderia vencê-la em um combate real.
+
+— Calma aí, ô acelerada. Acabei de acordar 
+
+— desconversei. — Nem todo mundo começa o dia nos 220, não sabia? Eu esqueci, beleza? Satisfeita? Bom dia pra você também.
+
+— Oxe, falei nada — disse ela, confusa.
+
+Apesar de nossas diferenças, ela é a pessoa mais próxima de mim depois do meu pai. E, apesar de ela não ter a mesma visão de mundo que a minha, era a única que não me julgava — muito pelo contrário, sempre me apoiava.
+
+— Vou subir pra minha sala agora. Já sabe onde é a sua? — perguntei, despretensiosamente.
+
+Chegamos ao topo da escada do segundo andar.
+
+— Sim, sim, é aqui à direita, no fim do corredor — ela falou entusiasmada.
+
+— Tá. A minha é no andar de cima, virando à esquerda, terceira porta à direita, turma 3B. Se precisar de mim, manda mensagem. Nem inventa de aparecer por lá. — Virei-me e segui para minha sala.
+
+No momento nem reparei, mas assim que comecei a subir a rampa para o próximo andar, minha ficha finalmente caiu: por que eu dei tanta informação sobre onde estaria se não queria que ela fosse até mim? Parece até que eu disse pra não fazer algo só pra ela ir e fazer.
+
+Mas eu não quero que ela apareça lá por vários motivos. Mas caso ela também não consiga me mandar mensagem, ou aconteça alguma coisa... ué... por que eu tô me preocupando com ela? Eu hein, tenho coisas mais importantes para me preocupar, como minha primeira aula do dia de hoje.
+
+Olhei o mural ao lado da minha porta:
+
+Primeira Aula: Combate Real
+
+Esse vai ser o melhor ano. Finalmente vou ser devidamente reconhecida por aquilo que realmente importa: minha força.
+
+Abro a porta.
+
+— Senhorita Lívia. Que bom termos você nesse dia de hoje — uma voz completamente nova para mim soou em minha direção. — Por que não se junta a nós?
+
+A turma ria baixinho em coro. Era nítida a ironia na voz e nos olhos daquele sujeitinho: um pouco mais alto do que eu, não apresentava ser lá grandes coisas fisicamente, olhos castanhos-claros e cabelo cacheado muito volumoso para a idade que aparentava ter. Um velho de uns 30 anos tentando parecer mais novo — um clássico tiozinho esquisito. Seu nome estava escrito grande na lousa: Pyetro, professor de combate.
+
+Sorri sarcasticamente.
+
+— O que foi, vovô? Perdeu a noção do tempo? Cheguei exatamente no horário.
+
+— Tem certeza? — ele me rebateu, convicto.
+Olhei de relance para o mural.
+
+Primeira Aula: Combate Real
+A primeira aula começará 10 minutos mais cedo…
+
+Olhei de volta para ele com tamanho ódio que não pude deixar de transparecer o que estava sentindo.
+
+— Mas tudo bem, flor. A aula vai acabar no mesmo horário — ele sentou na mesa. — Mas todo mundo já se apresentou; depois você conhece todo mundo. — Ele pegou um papel com anotações na mesa. — Mas pra não dizer que você não participou, fala com a gente: qual seu nome, idade, Virtude e o que você gosta de fazer?
+
+Respirei fundo e, abrindo os olhos calmamente, o olhei.
+
+— Meu nome é Lívia. Tenho 17 anos e minha Virtude é a capacidade de subjugar qualquer engraçadinho que tentar me passar pra trás — olhei para a turma, e eles engoliram em seco — e a coisa que mais amo fazer é usar minha Virtude. — Sorri para ele, sadicamente, completamente cheia de mim.
+
+Com a sala em silêncio, ele me olhava balançando a cabeça como alguém que ouve atentamente.
+
+— Maravilha. Pelo visto temos uma candidata. — Ele saiu da mesa com um rápido pulo. — Sala, vamos, todos pra arena. Lívia vai nos mostrar toda a extensão da sua Virtude.
+
+Ele me olhou nos olhos e passou por mim ainda com aquele mesmo sorriso. Eu só conseguia pensar: "Mas que porra esse merda tá pensando? Ele quer morrer?"
+
+Saindo da sala, todos os outros 27 alunos o acompanharam. Eu ainda não conseguia entender plenamente o que estava acontecendo. Seria um trote comigo? Ou talvez alguma surpresa? Todo mundo nesse lugar me conhece, seja positivamente ou negativamente; até quem é de outras escolas sabe quem eu sou. Vou ter que fazer esse cara se arrepender de ter me provocado.
+
+A arena ficava logo atrás da escola, com as mesmas dimensões de grandes estádios de futebol. A única diferença era que dentro não tinha um campo de futebol — a não ser que campos de futebol fossem redondos; senão, aí sim seriam exatamente iguais. O campo, no centro da arena, cercado por arquibancadas, possuía três marcações em seu gramado: um círculo no meio, pouco maior que um octógono de MMA, onde todo confronto ou disputa se iniciava; um círculo maior próximo à borda do campo, definindo o limite onde as atividades ocorreriam; e um outro círculo exatamente entre os dois anteriores, que apenas servia de aviso de que se estava relativamente longe do centro.
+
+O pior foi quando pisei naquele gramado e vi os demais alunos se juntando na arquibancada. Fui ver: enquanto eu andava em direção ao centro, alunos de outras turmas apareciam por toda a arquibancada, juntamente com seus professores. Eu simplesmente paralisei antes mesmo de chegar à segunda marcação.
+
+— Mas que porra tá acontecendo aqui? — falei, ainda incrédula, comigo mesma.
+
+— VENHAM TODOS VER UM CONFRONTO REAL! — dizia Pyetro, com um microfone na mão, já ao centro do campo. — NÃO É TODO DIA QUE SE TEM UMA OPORTUNIDADE DESSAS, NÃO É MESMO? — Ele gargalhava.
+
+A cada frase que ele ressoava naquele maldito microfone com mais força, eu cerrava meus punhos.
+
+Então ouvi uma voz:
+
+— Vai, Lívia! Você é a mais forte!
+
+Quando olhei, era ela: Anna. Ela me olhava com um brilho no olhar. Então eu rapidamente pensei: "...espera aí, eu sou a mais forte aqui. Por que eu tô preocupada?" Olhei de volta para ele com meu olhar confiante e, dessa vez, eu via só o mesmo inseto, igual a todos os outros. Ele não é nada. Eu sou a melhor.
+
+Todos na arquibancada estavam bem animados, e aparentemente todas as turmas já haviam chegado. Cheguei ao centro, e então ele começou:
+
+— Muito obrigado a todos que vieram aqui hoje. Muito obrigado aos professores, alunos e à nossa infame diretora, que permitiu que essa atividade de hoje fosse possível. — Ele se reverenciava em direção a todos, agora com um tom mais cordial. — E TAMBÉM À NOSSA ILUSTRE SENHORITA LÍVIA! UMA SALVA DE PALMAS PRA ELA, GENTE! — Ele gritava.
+
+Reverenciei a todos com muita classe e feminilidade — atitudes que não são nada eu — apenas para mostrar que estava totalmente confortável e no controle. Anna me aplaudia com muito entusiasmo; parecia até que eu era pop star naquele momento para ela. Mas também, a escola inteira te ver amassar o professor de combate realmente ia subir bons pontos no meu status social.
+
+— Muito bem, vamos às regras. Vai ser um O.V padrão: desmaiou, perdeu; saiu do último círculo do campo, perdeu; admitir derrota, acho que nem preciso dizer, né? — ele fez seu teatral suspense — perdeu.
+
+— Acho que eles podem se machucar, hein — debochei, confiante. — Não quer deixar só até o segundo círculo do campo?
+
+— Isso não será um problema. Bom… — ele olhou de lado, discretamente — não mais.
+
+Ele apontou na direção onde os operadores e juízes da arena ficavam, lá no alto. Quando menos esperei, um domo azulado começou a se formar ao redor do campo. Era imenso. Ele se fechou bem rapidamente e clareou logo em seguida; nem parecia que estava ali, a não ser que se olhasse bem de perto.
+
+— Graças à nossa nova diretora, conseguimos esse domo de última tecnologia. E com isso, mais uma regra: tocou no domo, perdeu. — Seu olhar maldoso pareceu atravessar meu coração.
+
+Não deixei transparecer o que aquilo aparentava para mim.
+
+— Menos papo, mais ação — cerrei os punhos e minha pele se avermelhou. — Vem logo, fracote.
+
+— Quando quiser, garotinha. — Ele sorriu.
+
+Naquele instante, em um segundo, disparei na direção dele, meu pé destruindo o gramado logo abaixo de mim. Tornei-me tão consciente da minha própria velocidade que só tive uma certeza: só a Anna vai conseguir ver o que vai acontecer com esse coitado. Meu corpo naquele momento tinha mais velocidade do que um tiro, e pela força que eu vou aplicar nele com um único soco, esse professorzinho, mesmo que tenha a pele indestrutível, vai voar longe. Vai ser uma vitória perfeita, sem dúvida. Eu o olhei naqueles instantes derradeiros antes do impacto: ele estava lá, congelado no tempo para mim, os olhos dele ainda olhando para onde eu estava antes de começar a me mover. Eu quase podia sentir pena dele, mas minha raiva era maior. Então morra, professor. Adeus.
+
+Então veio o impacto.
+
+A onda de choque levantou poeira, grama, terra e até metal da parte do fundo do gramado, que se retorcia e era lançado para longe. O domo vibrou com o impacto, juntamente com as arquibancadas e a própria arena, mas resistiu. Os alunos, assustados e trêmulos, se achegaram para perto para ver melhor, mas pouco se podia ver lá dentro. Aos poucos, a poeira foi se assentando. Grandes porções de terra e ferro retorcido ficaram acumuladas por toda a extensão da borda interna do domo. A tensão e a dúvida consumiam aqueles que assistiam, questionavam e se empurravam para poder ver o que havia acontecido. Um possível vencedor, talvez? Mas não, apenas tinha começado.
+
+— Aaaaaaa! — meu grito de fúria podia ser ouvido por toda a arena.
+
+Nesse momento, num piscar de olhos, a poeira rapidamente se assentou e revelou o ocorrido. Pyetro segurava meu punho. Ele estava envolto por uma aura verde que mais parecia uma chama. Seus cabelos se moviam com a aura como se ela fizesse vento fluir por seu corpo de baixo para cima; seus olhos refletiam aquela luz enquanto ele me olhava. Eu puxava e gritava, aumentando minha força. Meus pés começaram a deformar e afundar o aço abaixo de mim; ele, como uma estátua, nem se movia e me segurava como se eu nem sequer existisse.
+
+— Me larga — disse com expressão de dor, como alguém que faz força. — AGORA! — bradei.
+
+Ele abriu os dedos que me seguravam.
+
+A força que eu estava fazendo era tanta que, quando ele me soltou, fui lançada para trás muito rapidamente. Sinceramente, achei que iria bater no domo, mas antes disso cravo minha mão no chão de aço, que mesmo me desacelerando, fui parar a uns 2 metros do domo.
+
+— Desgraçado.
+
+Eu sentia minhas forças no limite após aquilo, e nem entendia como ele tinha me deixado naquele estado. Nem aconteceu nada de mais.
+
+— Alunos, se aproximem. Essa será a aula número um de combate — ele se apresentava aos demais na arquibancada. — Combate contra incêndios. — Então me olhou.
+
+— Ele tá me chamando de cabeça-quente? — pensei.
+
+Fiz uma segunda investida contra ele.
+
+— Vamos começar — ele deu um passo para trás. — Triângulo do fogo.
+
+Ele desviou de um soco meu enquanto estava de costas, que mais parecia que ele estava me olhando. Depois de um chute como se eu o tivesse avisado e uma investida de golpes rápidos que fiz contra ele, ele mal saía do lugar e nem parecia preocupado, continuava falando com eles.
+
+— Calor, oxigênio e algum combustível. Tire um desses fatores, e uma chama nunca chegará a ganhar vida.
+
+Segurou meu braço e me chutou na barriga para longe. Todos olhavam atentamente.
+
+— Vamos, senhorita Lívia, bata com vontade — ele me provocava, me chamando para o confronto. — Você tá no máximo quente; te quero em chamas. — Ele me olhava com uma mistura de empolgação e devaneio. — Vamos, todos estão assistindo.
+
+Não importava minha força, velocidade ou resistência; ele sempre desviava ou defendia com extrema facilidade. Cada um dos seus poucos golpes doía como se eu nem estivesse usando minha Virtude. Enquanto lutava com ele, lembrei-me do meu pai, o único com quem lutei sem minha Virtude. Ele me treinou para ser a melhor, para que ninguém nunca pudesse me vencer. Desde pequena, fui ensinada que, se eu desse tudo de mim, jamais poderiam me vencer. O pior era que tanto meu pai quanto Pyetro falavam as mesmas palavras: "Me bate com vontade", "Eu quero ver vontade nesses golpes", "Vamos lá, com vontade".
+
+— CALA A SUA BOCAAAAA! — bradei de tal forma que nunca deveria ter feito na vida.
+
+A arena tremeu. Os alunos, assustados, caíram para trás de bunda no chão. Eu tinha que acabar com aquela humilhação agora. Então avancei. Fui para cima dele de uma vez com tudo que tinha. Pela primeira vez, vi ele me olhar sério e minimamente preocupado. Ele ergueu o pé, ele daria um passo para trás, eu tinha certeza. Era minha chance: vou poder acertá-lo em cheio, um golpe limpo. Ele não vai conseguir se defender a tempo. Ele não é tão durão; só preciso acertar um, e estará acabado.
+
+Mas então, com o pé que julguei que ele recuaria, ele pisou para frente, e aquela aura esverdeada que o envolvia até então se expandiu.
+
+Não foi como eu imaginei que seria. Minha última memória foi aquela chama verde se aproximando de mim. E no fim, o impensável para mim aconteceu… eu fracassei… eu perdi.
+
+Capítulo 2: Vontade
+
+Vontade… o que eu tenho vontade de fazer? Por que questionam minha vontade? Eu não consigo entender. Eu dou o máximo de mim; isso já não mostra a força da minha vontade? Por que me questionam? Por que? POR QUE!?...
+
+Um vento frio batendo em meu rosto, meus olhos pesados como se estivesse acordando de uma longa noite de sono. Um gosto amargo na boca. Eu realmente apaguei?
+
+— Lívia?...
+
+Essa voz… eu conheço essa voz…
+
+Antes que eu formasse qualquer novo pensamento, veio o derradeiro impacto: um só soco me despertou de fato. Meus olhos se abriram. Não havia um punho no meu rosto, mas em questão de um segundo após o soco que havia sentido, me recuperei, já ativando minha Virtude e me preparando para voltar a lutar.
+
+Quando reparei, estava em uma sala parcialmente escura. Parecia ser no subsolo pela ambientação e pelos tubos de encanação e esgoto no teto. Na minha frente, havia 4 figuras — eram também 4 alunos da escola, pelos uniformes que usavam, mas eu nunca os tinha visto até então. Dois garotos e duas garotas.
+
+— Oxe, tá doida? — disse uma das garotas.
+
+Ela tinha cabelos não muito compridos e estatura bem inferior à minha. Estava próxima à cadeira onde eu estava sentada.
+
+— Foi você que me bateu? — questionei.
+
+— Ô, filha, calma, tá. Foi só um Soco Guiado, mesma coisa se você tomasse um soco num sonho.
+
+— Agnis, você sabe que não é assim que funciona, né? — um dos garotos a interrompeu.
+
+Ele era alto e até bem atlético.
+
+— Quieto, Lucas. — Ela se virou para ele. — É só pra ela entender o conceito. Ela ainda nem sabe o que é Vontade. — Ela voltou o olhar para mim.
+
+— Mas de que porra vocês tão falando?
+
+Antes que alguém pudesse me responder, as luzes se acenderam e meus olhos arderam brevemente.
+
+— Um soco guiado — era Pyetro. — Apenas um golpe que acerta sua alma, a sua Vontade, por assim dizer. Você sente, mas seu corpo não sofre com o impacto.
+
+Ele estava no pé de uma escada, ao lado de uma porta aberta, com a mão no interruptor.
+
+— Eu não disse pra vocês deixarem as luzes acesas para quando ela acordasse? — Ele veio andando em nossa direção. — Eita como gostam de drama, vocês hein.
+
+— Com quem você acha que a gente aprendeu? — disse Agnis, sorrindo.
+
+— E eu sei lá porra — disse Pyetro, se fingindo de desentendido.
+
+Ele gesticulou com o dedo, contando aqueles que estavam ali.
+
+— Cadê o Gabriel? — Pyetro perguntou.
+
+Eles olharam uns aos outros e em volta e deram de ombros como se não soubessem.
+
+Pyetro me olhou. Congelei. Eu ainda estava ali, virada para Agnis e olhando para ele. Não consegui mais pensar em derrotá-lo; minha maior questão agora era saber onde eu estava.
+
+— Onde…
+
+Antes que eu pudesse continuar, fui interrompida.
+
+— Professor, eu já posso descer? — aquela voz doce ecoou vindo do alto da escada. — É grande aqui embaixo da escola, né.
+
+Era Anna. Ela estava ali e, simplesmente, por alguma razão, o medo sumiu e o alívio revigorou meu coração. Senti quase como se tivesse nascido de novo naquele momento.
+
+— Ah, verdade, gente — ele riu — quase esqueci. Recebam com muito prazer a nossa nova integrante: a senhorita Anna.
+
+Eles olharam para ela, olharam para mim, olharam novamente para ela e retornaram o olhar para mim.
+
+— Se essa é a novata, quem é essa aqui, então? — disse a outra garota.
+
+Era mais alta que a outra, mas ainda menor do que eu, esguia, pálida, cabelos cacheados e bem compridos.
+
+— Ah sim, boa pergunta, senhorita Mayla. A senhorita Lívia estava aqui só recobrando a consciência — disse ele com os braços nos ombros de Anna. — David, por favor, faça as honras.
+
+— Sim, professor — disse o outro garoto, já atrás de mim.
+
+Ele era mais baixo que o outro, esguio, cabelos loiros e lisos.
+
+Mais rápido do que a velocidade com que virei para acertá-lo, eu já estava no pátio. Já era de noite, mas estava de manhã agora. Por tanto tempo eu apaguei? Mas quem era aquela gente? Onde eu estava? Meu Deus, a Anna! Então me lembrei dele tocando o ombro dela.
+
+Senti meu corpo todo esquentar, meu coração palpitar, minha pele avermelhar e o vapor quente saindo da minha boca.
+
+— Pyetro — dizia o nome dele quase rosnando — se fizer algo com ela, eu te mato.
+
+— Lívia? — era a voz dela.
+
+Anna, logo atrás de mim, me olhava como se esperasse para poder falar… Respirei.
+
+Voltei aos poucos ao normal e, fingindo que nada havia acontecido, arrumei minha roupa e me virei para ela.
+
+— Oi.
+
+— Você tá bem? — ela perguntou.
+
+— Sim, tudo bem. E você? — fingi perguntar por mera educação.
+
+— Tô bem também.
+
+— Então tá tudo bem. — Sorri e virei as costas.
+
+— Fui chamada pra fazer parte de uma turma especial do Professor Pyetro e eu aceitei — ela disse tão rápido quanto alguém normalmente podia dizer.
+
+— Por quê? — questionei, estática onde estava.
+
+— Porque eu prometi — ela abaixou a cabeça. — Pyetro tinha me visto no dia que fiz minha matrícula. Ele era da comissão avaliadora das Virtudes e ele...
+
+Eu virei para ela com fúria e a agarrei pelos ombros.
+
+— Ele te obrigou? Falou que se você não aceitasse, ele não te aprovaria?
+
+— Não! Calma. Olha, você sempre tomando decisões precipitadas. Espera eu terminar.
+
+Eu a olhei, assustada comigo mesma, e a soltei.
+
+— Desculpa. Pode continuar.
+
+Ela me olhou nos olhos e depois abaixou novamente a cabeça.
+
+— Ele disse que eu estava aprovada, que via potencial em mim. Ele perguntou se eu gostaria de participar de algo a mais, um projeto especial da escola. Mas quando perguntei se você estava no projeto, ele negou e disse que você não tinha perfil para o projeto.
+
+Instantaneamente, comecei a me afastar dela com expressão de desconfiança no rosto.
+
+— Calma. Quando eu descobri que você não tava, eu recusei na hora — ela continuou. — Eu não queria tá em algo que você não estava.
+
+Eu parei e voltei a ouvi-la.
+
+— Então ele fez uma proposta: se você se provasse digna, ele iria admitir eu e você; mas se você perdesse, eu teria que entrar no projeto sozinha. Ele disse que não ia abrir mão do meu potencial. Então eu aceitei.
+
+Virei-me lentamente e comecei a refletir. Anna segurou minha mão com força.
+
+— Você precisa acreditar em mim. Nunca passou pela minha cabeça que você perderia aquela luta. Você é a pessoa mais excepcional que eu conheço — ela puxava meu braço cada vez com mais força. — Por favor, Lívia, me escuta. Você é minha melhor amiga. Eu nunca faria nada pra te prejudicar.
+
+Em um solavanco, eu me arquei do chão e joguei metros à minha frente. Ela parou de pé, como já esperado da Virtude que ela tinha. Porém, meu olhar de desprezo para ela foi muito mais dolorido para ela do que minha intenção de machucá-la.
+
+— Por sua causa, eu fui humilhada em frente a toda a escola — dei um passo para frente. — Por sua causa, eu levei uma surra que dificilmente vou esquecer — dei mais um passo. — Por sua causa, eu descobri que a minha vida toda é uma mentira — cheguei bem próximo a ela. — Por sua causa… e por quê? Por causa de uma maldita aposta.
+
+— Mas eu só queria — ela se aproximou.
+
+— E ainda quer falar que é minha amiga? — questionei.
+
+Pela primeira vez na vida, vi o semblante dela de preocupada e temerosa passar para frio e raivoso.
+
+— Repete… — disse ela, firme e séria.
+
+— Que tipo de amiga é essa, você? — respondi sem pensar muito.
+
+Então veio o primeiro, o segundo e o terceiro. Foram socos, chutes ou cabeçadas, eu não conseguia ver — uma sequência interminável de golpes. Acho que esse é o maior erro que eu podia cometer: duvidar da amizade dela. Eu devia ter uns 13 anos quando prometemos uma à outra: nunca duvidarmos da amizade uma da outra. Com certeza, tínhamos maneiras diferentes de lidar com a amizade, mas para ela era algo sagrado, que ela ia me fazer respeitar, nem que fosse na marra.
+
+— Vamos, repete. Eu quero te ouvir dizer.
+
+Ela gingava na minha frente com um soco inglês em cada mão. Maldito presente que eu mesma tinha dado a ela — acreditava que compensaria a falta de força dela. Infelizmente, eu tava certa.
+
+Eu estava ajoelhada no chão, com a mão na barriga.
+
+— Eu vou te matar — disse enquanto cuspia sangue no chão.
+
+Não importava meu movimento, eu não conseguia acertá-la, bloqueá-la, e muito menos desviar dos golpes dela. Eu só tinha uma chance: antecipar e segurá-la. Se não fosse assim, nunca poderia vencê-la em uma luta. Mas, apesar de tudo, existe um motivo de eu ser a melhor: por que, apesar do meu medo, também nunca perdi pra você, ligeirinha.
+
+Em um momento de fúria, meu corpo se aqueceu, amplificando tudo que eu podia fazer. Bati com força no chão, fazendo todo o solo tremer. Vi ela de relance por um milésimo de segundo — tudo que precisava. Ela vem com um soco; não vou conseguir segurar. Me movo um pouco, apenas para desviar. O soco passa de raspão na minha bochecha. Ela tenta procurar um lugar para apoiar o pé. Não posso deixar. Segurei o outro braço dela. Sei que, se eu segurá-la por muito mais tempo, posso queimá-la. Ela não desiste, mas agora não há muito o que eu possa fazer. Ergo-a do chão. Se eu tacá-la no chão, ela vai ser despedaçada; se eu jogar pra cima, ganho tempo. É, não tem jeito: vamo de jeito antigo mesmo. Segurei-a pelo ombro e a abracei, desativando completamente meu poder.
+
+— Pode me bater agora, eu deixo — sorri.
+
+Ela, naquele abraço confuso, não conseguiu entender.
+
+— Anna, você não é só minha amiga, muito menos minha rival. Você é a irmã que eu nunca tive. É aquela que sempre conseguiu tirar o melhor de mim, mesmo quando nem eu via. É a minha força, a minha alegria nas horas mais difíceis. Pra você, eu sou apenas uma garota grande e ignorante que precisa de alguém pra não ficar sozinha. Mas você não entende que você é tudo que eu preciso. — Eu a soltei e coloquei lentamente de volta no chão. — Sei que você fez tudo que fez por minha causa e pensando no melhor pra mim. Me desculpa, de verdade.
+
+Ela me olhou nos olhos, quase chorando, e me respondeu:
+
+— É BOM VOCÊ PEDIR DESCULPA MESMO, PORQUE EU NUNCA FIZ NADA PRA VOCÊ DUVIDAR DA MINHA AMIZADE, TÁ! — Ela gritava e chorava, e meu ouvido chegava a doer.
+
+Eu ria e tentava consolá-la enquanto ela terminava de chorar e gritar comigo.
+
+— Tá bom, tá bom. Vamos pra casa, tá? Você tem que colocar um gelo nessa mão, tá toda machucada. — Eu falava enquanto a segurava com cuidado.
+
+— Um segundo, vocês duas — era a voz de Pyetro.
+
+Ele estava sozinho. Estranhamente, eu o via com outros olhos agora, mas ainda não confiava.
+
+— Lívia, desde o primeiro dia que te vi, sabia que você seria um problema. Já vi inúmeras pessoas como você, e sinceramente — ele fez uma pausa e me olhou nos olhos — estou feliz que errei com você. Eu mesmo disse a Anna que a única coisa que você se importava era você mesma. Ela insistiu que você não era assim e queria provar para mim. Ela mesma veio aqui porque confiava em você. Eu chamei ela para fazer parte da turma hoje, após você ter apagado; ela foi correndo te ajudar. A exibição na arena foi um projeto meu para falar da Vontade.
+
+— É sério isso? — questionei-a.
+
+Ela apenas acenou com a cabeça que sim.
+
+— Espera. Você disse agora, esse negócio de Vontade. Você fala tanto sobre isso. É vontade de quê?
+
+Ele riu como se tivesse ouvido algo bem engraçado.
+
+— Qual é a graça? — questionei.
+
+— Não é vontade como alguém ter o desejo de algo — explicou-me. — É Vontade: o desejo de fazer muito além do que se pode. É a sua força de vontade materializada na forma de uma energia.
+
+Aquela aura que o envolveu em nossa luta ressurgiu.
+
+— Essa é a Vontade. Ela alimenta nossas Virtudes e nos permite ir muito mais além. A Vontade fortalece tanto as Virtudes quanto os corpos; depende apenas de como você deseja usar.
+
+— Então você tá dizendo que nossas Virtudes podem ficar ainda mais fortes? — Anna perguntou.
+
+— Espera lá, Anna — eu me intrometi. — Se existe isso mesmo, como nunca ouvi falar? Por que ninguém fala disso por aí?
+
+— Lívia — ele me chamou — o governo não pode tirar nossas armas, então eles tiram a munição: a informação.
+
+Eu o olhei com fascinação.
+
+— Eu nasci com a Virtude de manipular Vontade. Por isso, vivi boa parte da minha infância e adolescência achando que não tinha Virtude alguma. Eu tinha que me empenhar 10, 20 ou até 100 vezes mais que os outros para conseguir acompanhá-los. Mas um dia eu conheci alguém que viu um potencial em mim — ele desviou o olhar de nós, desanimado. — Ele me ensinou a usar Vontade para que eu pudesse progredir bem mais e não ficar tão atrasado comparado aos outros. Então, finalmente, consegui usar minha Virtude. Afinal, como eu ia manipular algo que eu nem sabia que existia, não é mesmo?
+
+— Você vai nos ensinar? — perguntei, desesperançosa.
+
+Ele nos olhou, pensou, sorriu e, por fim, acenou que sim com a cabeça. Aquele dia, aprendi que não existia apenas um tipo de força, que o meu único recurso não era só aquilo que nasceu comigo, que a arma que nasceu grudada à minha mão necessitava de munição. Eu podia progredir bem mais. Nesse um ano, vou aprender tudo que puder e vou me tornar a melhor versão de mim que eu puder. Eu prometo.
+
+
+
+Capítulo 3: Fraca vs Fortes
+
+— Acredite, o seu sacrifício irá trazer inúmeros benefícios. Por sua causa, salvaremos o mundo — voz masculina…
+
+— Não sei. Como teremos certeza de que vai funcionar? — voz jovial…
+
+— Nós teremos poderes, vamos ajudar as pessoas, acabar com as guerras. Você não quer isso?
+
+— Quero, mas…
+
+— Mas nada. Vai, pula.
+
+— Não! Espera…
+
+Ruído de TV
+
+Eu e Anna olhávamos para aquela cena completamente perplexas. Era interessante: plena quarta à noite, e eles aqui nesse lugar escuro assistindo a esses filmes antigos — aqueles 4 sentados no chão feito crianças, sempre assistindo uma ficção de um mundo onde ninguém tem nada de especial, nem Virtudes, nem Vontades, nem nada. Meros humanos. Então alguém surge para ser o salvador do mundo, com uma explicação louca: "O Escolhido". Será que eles realmente acreditam nisso? Eles realmente acham que um bando de nerds vai salvar o mundo? Só pode ser piada.
+
+— Professor, as suas aulas são isso? A gente fica vendo super-heróis de mentirinha até decidir virar um também?
+
+Pyetro passava boa parte das aulas sentado em uma mesa no canto da sala. Muitos papéis, muitas canetas, duas canecas, 3 cubos mágicos 3x3, algumas revistinhas de caça-palavras empilhadas. Ele anotava em um caderno grosso, impressionantemente marcado nas páginas por post-its. Uma caneta na orelha, uma de cor diferente na mão e um marcador de texto entre os dentes. Ele me olhou brevemente sobre os óculos que se apoiavam de leve sobre a ponta de seu nariz. Olhou para o caderno, sorriu como alguém que acabara de ser provocado, fechou o caderno, guardou-o em uma gaveta e se levantou, colocando o resto dos materiais em cima da mesa.
+
+— Senhores — disse ele, firmemente.
+
+Ele pegou um dos cubos e sumiu diante dos meus olhos. Eu não entendi, muito menos consegui acompanhá-lo com os olhos. Mas, ao olhar para Anna ao meu lado, ela já olhava para o outro lado da sala. Eles já estavam todos lá. Pyetro estava sentado em uma cadeira giratória, já terminando de girar e, assim, finalizando o cubo. Além dele, todos já estavam alinhados próximos a ele. A TV já estava desligada, e eu não tinha conseguido reparar em nenhuma ação sequer.
+
+— Regras para a senhorita Lívia, em coro, por favor.
+
+Em um coro que me fez sentir no exército, cada uma das regras foi ditada.
+
+REGRA #1: NÃO SOMOS HERÓIS, SOMOS O MAL DESSA GERAÇÃO, FORMADOS PARA DESTRUIÇÃO, NÃO PARA ACEITAÇÃO.
+
+— Já que não queremos aceitação? — Pyetro perguntou.
+
+REGRA #2: NÃO CHAMAMOS ATENÇÃO, NÃO QUEREMOS ATENÇÃO, EVITAMOS A TENTAÇÃO.
+
+— Então o que nunca seremos? — Pyetro perguntou.
+
+REGRA #3: NUNCA SEREMOS DERROTADOS, SOMOS OS FORTES E QUE MORRAM OS FRACOS.
+
+— Então o que vamos evitar? — Pyetro perguntou.
+
+REGRA #4: NÃO VAMOS APARECER, MUITO MENOS NOS MOSTRAR; PROTEGER OS NOSSOS E A MORTE AO MÁXIMO EVITAR.
+
+— E, por fim?
+
+REGRA #5: NÃO SEREMOS EXPOSTOS E ELIMINAR TODOS AQUELES QUE TENTAREM; TRAIÇÃO NÃO VAMOS TOLERAR.
+
+Nesse momento, todos olharam para nós. Eu engoli em seco. Os olhos deles, frios, fizeram minha espinha arrepiar. Eu tava na porra de uma seita.
+
+Então todos simplesmente começaram a gargalhar. Pyetro mal podia se aguentar em pé.
+
+— É só brincadeira, sua doida — Pyetro veio em nossa direção. — Sério, vocês tinham que ter visto a cara de vocês. Você, principalmente Lívia, parecia que tinha visto uma assombração.
+
+— Oi? Era mentira? — Anna o questionou.
+
+— Óbvio, né — ele respondeu. — Meu Deus, hein, meninas. Até parece, né.
+
+Ele veio até nós, e os outros chegaram mais perto.
+
+— Realmente temos 5 regras, mas essas são elas.
+
+Ele apontou para um folheto na parede, onde estava escrito:
+
+1# HERÓIS NÃO EXISTEM, NÃO SOMOS A EXCEÇÃO. (Pyetro)
+
+2# NÃO CHAMAMOS A ATENÇÃO, FAMA SÓ VAI NOS ATRAPALHAR. (Gabriel)
+
+3# NÃO ENTRAMOS EM BRIGAS, NEM EM DISCUSSÕES, MUITO MENOS EM CONTRAVENÇÕES. (Lucas)
+
+4# PARA PROTEGER OS NOSSOS, VALE TUDO, ATÉ DESOBEDECER ÀS REGRAS. (David)
+
+5# UMA VEZ UM DE NÓS, SEMPRE UM DE NÓS, MAS NUNCA FALE DE NÓS. (Mayla)
+
+Eu e Anna olhamos e relemos aquele folheto. Ele parecia velho, e cada regra foi escrita em um período diferente de tempo por pessoas diferentes. O fato de cada um ter o nome de alguém me parecia que cada um tinha a criado.
+
+— Cada um criou a sua, ou vocês se reuniram para decidir as regras? — eu os olhei.
+
+Eles riram sem graça, meio que evitando falar.
+
+— Ué, eu falei alguma coisa?
+
+— Não, senhorita Lívia, não é isso. É que esses nomes não são dos criadores das regras — Pyetro olhou para eles brevemente. — São só os nomes dos causadores das regras existirem.
+
+Ele também riu. Eu olhei novamente para aquele papel, mas depois Mayla e Agnis explicaram para mim e para Anna. Quando a primeira turma especial do Professor Pyetro surgiu, ele só tinha colocado uma Regra, para nos deixar mais soltos. Ele achava que a Regra #1 era bem explicativa e nos manteria na linha, mas turma após turma, ele percebeu que não.
+
+No primeiro ano da turma, Gabriel — o aluno que, até então, eu não tinha conhecido — era uma espécie de superstar na escola e, por causa de suas habilidades diferenciadas, chamava muita atenção. Pyetro viu potencial nele, mas disse que ele deveria mudar sua personalidade. Apesar de extremamente popular, ele teve que mudar sua conduta, e até o final daquele ano todos esqueceram dele. Diferente de mim, ele era disciplinado e aceitava ouvir; o próprio Pyetro me disse isso. Até me deu curiosidade: "Quem é esse Gabriel?".
+
+Elas ainda falaram que a Regra 3 veio após o Lucas, no primeiro ano dele, ter participado de uma briga generalizada entre gangues que houve durante as férias de julho. Pyetro disse que ele tinha que escolher que tipo de vida ele ia querer para ele. Ele próprio decidiu sair daquela vida dupla e hoje é um dos melhores de nós. Elas disseram que, no final daquele mesmo ano, alguns garotos envolvidos tramaram contra a vida do próprio Lucas. Ele achou que, se lutasse contra eles, estaria indo contra as regras, e a Virtude dele não é das melhores para fugir — naquele momento, nada mais era do que poder ver alguns segundos no futuro. Então foi quando David apareceu. David bateu em todo mundo antes que eles conseguissem entender o que havia acontecido. Naquela época, ele apenas podia se teletransportar por curtas distâncias. Quando voltaram, Pyetro disse que já sabia de tudo que havia acontecido. Devido ao contexto, ele decidiu criar uma nova regra. Afinal, quando Lucas lutou, não havia propósito nem honra; mas quando David lutou, foi completamente diferente. Então permitiu que a gente lutasse para proteger, mas nunca para satisfazer nosso próprio ego, criando assim a Regra número 4.
+
+Apesar de eles serem muito diferentes entre si, principalmente de mim e da Anna, eu conseguia ver certas semelhanças entre eles. Talvez fosse a forma de falar ou a confiança que exalavam; eles pareciam até que não perderiam uma luta para ninguém. Quase me dava água na boca de poder lutar com eles, ali e agora. Era minha chance.
+
+— Que tal um O.V, hein? — perguntei.
+
+Agnis riu baixo, num ar de quem debochava de mim.
+
+— Falei alguma coisa errada? — questionei.
+
+— Não, achei uma ótima ideia — Pyetro falou.
+
+Ele acabara de entrar na sala e já vinha em nossa direção.
+
+— Lívia contra Agnis. Só um aquecimento; é bom que a gente já pode analisar alguns movimentos.
+
+Todos começaram a se retirar do centro da sala, e apenas Agnis ficou no centro juntamente comigo. Ela tirou a blusa do uniforme, revelando uma camiseta mais justa por baixo.
+
+— Espera aí, professor — prontamente me posicionei. — Eu não posso escolher?
+
+— Por quê, gatinha? — Agnis riu. — Tá com medo?
+
+Eu a olhei com raiva e quase avancei, mas consegui me conter.
+
+— Não é isso. É que não tem graça lutar com a mais fraca e sem talento — sorri sadicamente.
+
+Nesse momento, uma expressão de raiva surgiu no rosto de Agnis. Então ela, na velocidade de um piscar de olhos, ergueu-se do chão com sua Virtude e vinha a toda velocidade em minha direção. Mas antes que eu me posicionasse para me defender e ela viesse a me atingir, ela sumiu, com o punho dela bem diante dos meus olhos, e eu fui atingida apenas pelo vento que a acompanhava. Olhei para os lados: todos estavam calmos e apenas observavam.
+
+— Okay, garota. Você que sabe. — A voz de Agnis veio das minhas costas.
+
+Quando me virei, ela estava de costas para mim, apenas indo em direção à parede vestindo sua camisa. Olhei para Pyetro, e ele simplesmente deu um tapinha no ombro de Lucas. Ele fez uma cara de cansado, mas com um simples balançar de cabeça de Pyetro, ele apenas abaixou a cabeça e veio para o centro. Ele realmente parecia não querer lutar comigo, mas por quê? Ele me achava forte demais e tinha medo de mim? Ou o contrário: eu seria fraca demais e ele estaria apenas perdendo tempo comigo?
+
+— Olha, garota. Faz o seguinte: vem com tudo, tá? — o tédio no rosto dele era notável. — Tenta, pelo menos, fazer isso ser interessante para nós dois, tá?
+
+Não havia mais dúvidas: era a opção número 2. E nesse mesmo momento, meu sangue ferveu.
+
+— Caso vocês não tenham pegado, meu nome é Lívia, tá!? — ironizei.
+
+Meu corpo se esquentou: mais força, mais velocidade, mais capacidade para vencer. Eu só podia vencer. Eu vou vencer. Então, avancei.
+
+— Vou te mostrar quem é fraca — pensei.
+
+Meu primeiro soco: ele desviou facilmente. O segundo, de esquerda: nem raspou. Meu chute por baixo: ele pulou. E quando achei que o acertaria, pelo fato de ele estar no ar, ele simplesmente segurou meu soco. Não importava minha velocidade, meus golpes, minha intensidade ou, muito menos, minha criatividade; ele simplesmente desviava ou bloqueava, previa com clareza cada um dos meus movimentos. Ele parecia ter todo o tempo do mundo para aquilo, mas ele não era necessariamente rápido. Afinal, eu já era bem acostumada a ver uma velocista lutando, e certamente não era o caso dele. Muito pelo contrário: eu conseguia ver os movimentos dele — eram fluidos e até muito precisos — mas nenhum humano com Virtudes físicas conseguiria se mover daquele jeito. Ele simplesmente estava um passo à frente em tudo o que eu fizesse. Eu não conseguia vencê-lo em nenhum aspecto. Não importa o quanto eu tentasse, aquele garoto era muito melhor do que eu.
+
+Impulsionei-me e o rodeei, buscando um ângulo melhor. Ele não é mais rápido que eu, só tem olhos rápidos. Nas costas dele, me encontrei.
+
+— Se ele não vê, não pode antecipar — pensei.
+
+Impulsionando com as mãos no chão, dei um chute em suas costas.
+
+Bom… achei que tinha chutado. Ele girou, pegou minha perna e me lançou como uma boneca de pano para o outro lado da sala. Eu acertei o chão feito um animal que crava suas garras no chão buscando firmeza.
+
+Ele começou a andar na minha direção.
+
+— O fato de eu não ver você não significa que eu não consiga ver. Se eu sou o alvo, eu vou tá lá no futuro pra ver; logo, eu vejo. E se o futuro vai acontecer para onde eu tô olhando, eu ainda vejo — só piorando sua situação.
+
+Minha expressão congelada de confusão era inconfundível; não tinha entendido uma só palavra que tinha saído da boca daquele garoto. Os demais riam, encostados na parede; Pyetro apenas sorria nos observando.
+
+— Tô te passando o bizu, garota. Aproveita — disse Lucas.
+
+— Cala boca, esquisito — avancei.
+
+Os olhos dele se arregalaram, mas ele se manteve esquivando e defendendo.
+
+— Ei, garota, sem ofender.
+
+— Por quê? Tá carente?
+
+— Cala boca, garota. Você nem sabe o que tá falando.
+
+— Não tô falando, tô perguntando. Tá doendo é porque é verdade.
+
+— Tô te falando: se eu pegar pesado, você não vai gostar.
+
+— Você pega pesado? Deve ser um soca-fofo do caralho.
+
+Ele segurou meu soco e meu chute e não largou. Armei meu soco em direção ao rosto dele.
+
+— PAREM! — Pyetro gritou.
+
+Quando olhei, ele já tinha me soltado e já estava lá próximo de Pyetro. Agnis, já sem o uniforme, parecia estar pronta para lutar. Pyetro acenou com a cabeça para ela e apenas deu um tapinha nas costas de Lucas, que passava por ele — parecia mais uma substituição de futebol.
+
+Então ela veio andando, se aproximando de mim.
+
+— Sério, você é muito babaca. Você não entendeu nada mesmo, né.
+
+— O que você tá falando? Não tenho culpa se ele é sensível. A vida vai ser bem mais dura que isso. — Fui andando em direção a ela.
+
+— Não tô falando disso, sua idiota. Você tava jogando sujo com ele, tentando desestabilizar ele pra ganhar.
+
+— Ué, em uma luta vale tudo.
+
+— Só que isso aqui não é uma luta, sua escrota. É um O.V.
+
+— Ah, é?
+
+Nós nos encontramos no centro e nos encaramos.
+
+— Pra mim, um O.V é isso. Fodasse o que você acha.
+
+
+— Que tal uma aposta, então? — ela sugeriu.
+
+— Só falar.
+
+— Eu ganho de você sem usar minha Virtude, e você pede desculpas pro Lucas.
+
+— Impossível.
+
+— Tá com medo?
+
+Eu a olhei por um momento.
+
+— Ok. Mas se eu ganhar, você vai ser minha cadelinha o resto do ano.
+
+— Fechado.
+
+Mais rápido do que meus olhos podiam piscar, ela se abaixou e chutou meu queixo. Era uma força descomunal. Fui jogada para trás. Aumentando minha Virtude ainda no ar, me virei, apoiei a mão no chão e aterrissei. Quando a olhei, rapidamente me arrependi. Ela tinha uma aura similar à que tinha visto em Pyetro, mas a dela era azul-claro, ciano, basicamente. Ela sumia e aparecia me atingindo da mesma forma que Anna fazia. Mas não era possível. Como poderia? Tá me dizendo que o poder da Anna ou o meu era inútil, que o que a gente faz qualquer um pode fazer? Eu precisava de mais, muito mais. Eu precisava ficar ainda mais forte.
+
+Tentei tomar espaço, mas ela me acertava. Quando eu me defendia, mais golpes entravam. Até quando mirei o chão, ela pegou minhas pernas e me jogou de costas no chão. Ela era simplesmente imparável, incansável. Sem falar que os golpes dela com as mãos limpas doíam muito mais do que os da Anna. Uma eu não conseguia acertar, da outra não conseguia me defender… como eu vou ganhar deles?
+
+Pyetro, no quadro, falava: anotações e mais anotações. Lucas, em pé, anotava. Anna, Mayla e David, sentados, já anotavam também. Agnis, por outro lado, bem atrás deles, sentada no chão, encharcada de suor, bebia sua água prestando atenção em cada palavra dita por Pyetro durante a explicação. Eu, por outro lado, estava logo ao lado de Agnis, deitada no chão, completamente ofegante, duplamente suada e completamente acabada. A semana mais hardcore da minha vida, e só tinha se passado 3 dias.
+
+— Então, em resumo — consegui ouvir Pyetro — O.V. vem de Ostencio Virtu, uma demonstração da sua Virtude, uma prática de origem romana com finalidade, como o próprio nome já diz, de uma demonstração pública daquilo que vocês receberam dos deuses para que os demais vejam.
+
+Eu nem conseguia abrir meus olhos. A única coisa que eu conseguia ter força era para respirar, e achei que até isso ia parar a qualquer momento. Agnis pegou uma outra água e empurrou para próximo de mim lentamente.
+
+— Então, gente, alguma dúvida?
+
+Silêncio…
+
+— Sério? Ninguém?
+
+— Eu tenho uma — uma voz grave veio da porta.
+
+Todos, menos eu, se viraram para olhar.
+
+— Quem é a novata estirada no chão?
+
+Era um jovem alto e forte, de jaqueta de couro preta.
+
+— Gabriel! — Agnis gritou.
+
+Em um pulo, ela se levantou e voou em direção a ele, recebendo-o com um caloroso abraço. Todos rapidamente foram cumprimentá-lo e trocar apertos de mão. Mas não eu… eu apenas me mantive ali… no chão…
+
+Que baita primeira impressão: "...que é novata estirada no chão..." Isso vai ecoar na minha cabeça por um booommm tempo.
+
+Capítulo 4: Realidade
+
+Quando eu tinha 10 anos, meu pai estava comigo na casa dos meus avós no interior. Ele me olhava da cerca de dentro do curral para o campo, falava como eu era forte, que eu era especial, mas que eu nunca deveria me acomodar. Por esse motivo, ele me motivava e me incentivava a treinar. Me lembro como se fosse ontem: minha primeira provação.
+
+— Mas pai…
+
+— Relaxa, meu anjo, é só uma vaca. — ele falava com calma. — E lembra, animais não têm Virtudes, você tem. Use isso.
+
+Meu pai falava com aquela tranquilidade porque não era ele que estava ali. Minhas pernas tremiam tanto que mais parecia que, se eu mexesse uma, a outra cederia na mesma hora. O pior era que a vaca em questão não estava sozinha. Naturalmente, a Boneca seria até bem dócil comigo, mas ela estava com o bezerro recém-nascido. Naquele momento, eu já sabia que ela não iria facilitar pra mim.
+
+Ela me olhava fixamente. Eu olhava fixamente para ela e o bezerro mamando.
+
+Meus braços abertos que mais pareciam que eu estava pronta para agarrar um pênalti. Com minha Virtude desperta desde os 6 anos, eu já treinava com meu pai há um bom tempo, mas derrubar aquela vaca — ou pelo menos afastá-la do bezerro — parecia uma tarefa meio irreal para mim.
+
+Respirei fundo. A vaca bufou. Olhei novamente para ela. Só então disparei em direção a ela. Particularmente, foram simplesmente os 10 metros mais longos da minha vida. Boneca firmou os cascos no chão como quem iria me dar uma cabeçada que me jogaria para mais longe dela do que eu já estava. Ela realmente iria, porque a dois metros dela eu lembrei: não ativei minha Virtude.
+
+Até poderia dizer a quantidade de coisas que passou pela minha cabeça naquele momento, mas não deu tempo.
+
+Meu pai passou em uma grande velocidade ao meu lado, me segurando com uma mão, me ergueu no ar e me lançou graciosamente sobre Boneca. Eu caí sentada sobre ela, então me fixei. Meu pai, que passava, segurou o bezerro nos braços em direção ao campo aberto e correu.
+
+Eu ri da cena.
+
+Entretanto, Boneca disparou atrás dele em seguida. Quase não tive tempo de me segurar.
+
+— Meu Deus, Boneca, calma! — eu gritei.
+
+Aqueles eram bons momentos: meu pai a correr e Boneca a galope logo atrás, eu a segurando e o bezerro a mugir nos braços de meu pai. Meu pai fintava pra um lado e corria pro outro. Boneca quase se desconjuntou tentando acompanhá-lo.
+
+Era bom demais.
+
+Só então, naquele momento, agarrada sobre ela, consegui me lembrar e, consecutivamente, me concentrar.
+
+Força.
+
+Meus braços curtos começaram a apertá-la. Boneca parou bruscamente, começou a se sacudir como quem queria me derrubar.
+
+Resistência.
+
+A soltei do abraço que a apertava e me ergui sobre ela, segurando em sua pele com apenas uma mão apoiada sobre ela. Meu pai vinha em minha direção. Mais rápido do que havia passado por mim outrora, por sinal.
+
+Velocidade.
+
+Me lancei ao chão, rolei sobre a grama do pasto, levantei a mão e só então disparei, indo a toda velocidade em direção ao curral, como alguém que espera um lançamento por cima. Meu pai ergueu o bezerro sobre sua cabeça e, indo em direção a Boneca, lançou o bezerro para mim.
+
+Me lembro daquele dia como se fosse ontem: o salto que dei para pegar o bezerro ainda no ar, no movimento de olhar de volta para o curral e ver que meu pai já estava lá me esperando, fingindo que nada havia acontecido.
+
+A Virtude do meu pai, como ele a chamava, era a Troca de Marcha. Permitia que ele aumentasse a velocidade e a força conforme um tempo determinado passava. Hoje em dia, com a idade, ele só conseguia alcançar até a 5ª marcha, mas ele me disse uma vez que, quando mais jovem, conseguia ir muito além. Ele dizia também que, quando ele era pequeno como eu, não conseguia passar de duas marchas.
+
+A fraqueza que meu pai tinha — que ele falava que eu não ia ter, e que por isso ele acreditava que eu seria a melhor — era a constância. Ele precisava "esquentar" para poder lutar, enquanto eu não tinha esse problema. Não entendia porque ele dizia isso. Ele sempre se negou a lutar sério comigo. Teve uma vez, quando eu tinha 12 anos, que ele ativou a 4ª marcha contra mim. Foi a primeira vez que eu senti um soco de alguém doer tanto…
+
+Bom…
+
+Até aquele professor aparecer.
+
+— Vamos, Lívia, levanta. — a voz abafada de Pyetro ecoou. — Sai desse chão.
+
+Mas quem é você, Pyetro?
+
+— Vem conhecer o Gabriel. — Pyetro continuou.
+
+Então meus olhos se abriram.
+
+Pyetro estendia a mão para mim. Eu nem pensei muito, segurei e ele me levantou. Apesar de eu estar meio tonta, até que dali em diante tudo fluiu muito bem.
+
+Aparentemente, todos já haviam se dispersado de perto do Gabriel. Ele já estava mais próximo de mim, cumprimentando a Anna — afinal, além de mim, ela também era novata ali.
+
+Ele era bem maior do que eu, então era engraçado ver Anna olhando para cima e ele para baixo. A única que ainda ficava perto dele, dos demais, era a Agnis.
+
+Me observando…
+
+Aquela que acabara de me derrotar…
+
+E foi então.
+
+Eu despertei.
+
+— O que foi, Lívia? — Agnis me questionou. — Viu um fantasma?
+
+Abri a boca para respondê-la, mas o som não saiu.
+
+— Para com isso, Agnis, deixa eu conhecer a novata. — Gabriel colocou a mão na frente de Agnis. — Eu não te tratei assim quando você chegou.
+
+Ela olhou incrédula para ele.
+
+— Quando eu cheguei? Quando eu te conheci, eu já estava na turma há dois meses.
+
+Ela deu um soco de leve no ombro dele.
+
+— Dois dias, dois meses, tudo igual, é tudo novato. — ele estendeu a mão para mim. — Prazer. Eu me chamo Gabriel.
+
+Eu apertei a mão dele e apenas respondi positivamente com a cabeça.
+
+Ele me olhou.
+
+— Entendi. Você não é muito de falar.
+
+Ele tinha acabado de me conhecer e já tinha tirado a conclusão mais errada possível sobre mim.
+
+— Então, Lívia, finalmente com a gente, hein? — Ele sorriu pra mim.
+
+— Oi? Você já me conhecia? — eu perguntei.
+
+Ele me olhou e a expressão dele havia mudado: olhos arregalados. Olhou para o Pyetro, mas esse já estava de costas, assobiando. Olhei para Agnis e ela, com a mão no rosto, ria em negação.
+
+— Caralho, Gabriel, tu é burro pra porra, hein. — Agnis ria.
+
+— Ué, você já tá batendo nela, achei que ela já sabia. — Gabriel estava incrédulo.
+
+— Sabe do quê, gente? — eu continuei questionando.
+
+Pyetro se virou para nós.
+
+— Saber do óbvio, senhorita Lívia. — Pyetro sentou em sua cadeira. — A senhorita passou os últimos 3 anos andando por essa escola com uma síndrome de deus, se auto nomeando a aluna mais forte da escola, mais forte até que os professores, melhores notas, melhores avaliações gerais. É óbvio que todo mundo aqui te conhece.
+
+Eu olhei em volta. Todos olhavam para mim. Todos ali — alunos e professor — todos mais fortes do que eu. O que mais me machucava era que eles não eram só mais fortes, eles eram melhores. Agnis era irritante, ainda por cima mais forte do que eu. Ela não precisava nem usar a Virtude para ganhar de mim. E ainda assim, quando Pyetro me dava a maior lição de moral, ela me olhava séria, me olhava como alguém que realmente queria o meu melhor.
+
+Para ser bem sincera…
+
+Eu, no lugar dela, estaria me acabando de rir.
+
+— Professor — Gabriel levantou a mão — o senhor vai me desculpar, mas não acredito que a Lívia seja muito diferente de nós.
+
+Pyetro apoiou os cotovelos nas pernas e cruzou os dedos.
+
+— Desenvolva.
+
+— Acredito que cada um de nós aqui possui Virtudes e imperfeições únicas. — Gabriel se virou para os outros espalhados pela sala. — Muitos de nós mantivemos essas imperfeições mesmo depois de adentrarmos entre essas paredes.
+
+Todos se olharam entre si.
+
+Gabriel se aproximou de mim.
+
+— Eu era que nem você. — Ele segurou meu ombro. — Não importa o que aquele tiozinho ali sentado disse.
+
+Eu ri e Pyetro sorriu.
+
+— Se você tem força de vontade e está disposta a mudar — Gabriel me olhou nos olhos — já basta para a gente.
+
+Meus olhos marejados entregavam meus sentimentos.
+
+Pyetro se levantou. Tentou esconder o riso e apenas tossiu.
+
+— Que conversinha mole, hein, Gabriel. 50 voltas no salão pra todo mundo. Sem usar Vontade nem Virtude, pra tomarem vergonha na cara. Bando de vagabundo.
+
+Todos riram, mas mesmo assim começaram.
+
+Na hora, eu sinceramente não entendi. Apenas acompanhei.
+
+Pyetro assobiou para mim antes que eu saísse, com a mão me chamou e apontou para a cadeira logo na frente da mesa dele.
+
+Passou muita coisa na minha cabeça. Só sabia que coisa boa não podia ser.
+
+— Senta aí, Lívia. — Pyetro puxou a cadeira para mim e encostou em sua mesa. — Vamos conversar rapidinho.
+
+— Olha, professor, desculpa, mas isso aqui não é pra mim…
+
+Pyetro prontamente tampou minha boca e apenas fez um sinal de silêncio para mim.
+
+— Nem inventa, já teve sua chance.
+
+Eu o olhei assustado.
+
+Ele foi lentamente se afastando de mim.
+
+— Vai. Começar de novo. Vou te dar mais uma chance.
+
+Eu o olhei…
+
+Pensei…
+
+— O senhor tá certo. — Abaixei a cabeça. — Eu não sou nada. Não sou mais forte que os professores, nem mais forte que os alunos. — Levantei meus olhos para Anna, que estava correndo. — Eu não sou melhor nem que a minha própria amiga, que nem treina.
+
+Pyetro olhou para mim, para a turma e voltou o olhar para mim.
+
+— Então é assim? Você é mais fraca do que 7 pessoas e só por isso é mais fraca que qualquer pessoa?
+
+Eu o olhei com os olhos molhados.
+
+Ele se ajoelhou próximo de mim.
+
+— Me escuta aqui. Não é porque você é mais fraca que outros 7 que você é a mais fraca.
+
+Eu olhei confusa e ele continuou.
+
+— Você não queria ser a melhor? Eu te coloquei entre os melhores. — Ele pôs o dedo no meio do meu peito. — Não me importa quem você era antes. Eu já tô olhando pro seu amanhã. Por que você não olha também?
+
+— Eu não consigo acertar um soco. Você sabe o quão frustrante isso é pra mim? E ela nem tava levando a sério.
+
+— Você está falando da Agnis ou da Anna?
+
+Eu, desconfiada, olhei para ele.
+
+Ele rapidamente captou a mensagem.
+
+— Olha, não importa. — ele se levantou. — Se você perder apenas para as pessoas que estão dentro dessa sala, tá de bom tamanho pra mim. Pra você não?
+
+Apenas abaixei a cabeça novamente.
+
+— Olha só, Lívia. — Pyetro se encostou na mesa novamente. — Eu sei que você cresceu ouvindo que era a melhor, e quer que isso seja verdade a todo custo. Mas a verdade é que, tirando o Gabriel ali, todo mundo não ouviu nada disso. Muito pelo contrário. A Agnis, mesmo, ouviu a vida toda que ela era um lixo.
+
+Eu olhei para eles. Agnis corria ao lado do Gabriel. Os dois riam tanto. O quão forte eles realmente eram?
+
+— Você precisa se libertar disso. — ele me segurou pelos ombros. — Precisa retornar à realidade. Precisa descobrir quem você realmente é, para só assim descobrir quem você pode ser.
+
+Eu o olhei.
+
+— Como?
+
+Ele sorriu.
+
+— Eu vou te mostrar.
+
+Ele se aproximou minimamente do salão, apenas a dois passos de mim.
+
+— Atenção, turma. Tragam as novatas.
+
+Ele olhou para mim com aquele sorriso divertido dele.
+
+— Hoje vamos fazer a iniciação das novatas no mundo da Vontade.
+
+Aqueles olhos, aquele sorriso. Pyetro era mais que apenas um professor. Ele também era verdadeiramente um amigo — não só meu, como também de todos os outros. Tanto poder, do que adiantaria? Antes de aprender a Vontade, ele queria que eu soubesse que a tal força que eu tanto valorizava não era a única força que existia. Que tinha muito mais a aprender. Vontade seria apenas o primeiro degrau para um mundo bem mais vasto que eu estava prestes a adentrar.
+
+</div>
+
+
+
+<script>
+
+    // Organização Inicial //
+    const textoOriginal = document.getElementById("texto-original");
+    const inicio = document.getElementById("inicio");
+    const sumario = document.getElementById("sumario");
+    const leitor = document.getElementById("leitor");
+    const listaCapitulos = document.getElementById("lista-capitulos");
+    const conteudoCapitulo = document.getElementById("conteudo-capitulo");
+
+    // Divizão e organização da Historia //
+    const blocos = textoOriginal.textContent
+        .trim()
+        .split(/\n\s*\n/)
+        .map(bloco => bloco.trim())
+        .filter(bloco => bloco !== "");
+
+    // Conteudos dos Capitulos //
+    const secoes = [];
+    let secaoAtual = null;
+
+    function escaparHTML(texto) {
+        return texto
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;");
+    }
+
+    // Indentificador dos Capitulos e Paragrafos //
+    blocos.forEach(bloco => {
+        const linhas = bloco.split(/\n/);
+        const titulo = linhas[0].trim();
+
+        if (/^(PRÓLOGO|Capítulo \d+:.*)$/i.test(titulo)) {
+            secaoAtual = {
+                titulo: titulo,
+                paragrafos: []
+            };
+
+            const primeiroParagrafo = linhas.slice(1).join("\n").trim();
+
+            if (primeiroParagrafo) {
+                secaoAtual.paragrafos.push(primeiroParagrafo);
+            }
+
+            secoes.push(secaoAtual);
+        } else if (secaoAtual) {
+            secaoAtual.paragrafos.push(bloco);
+        }
+    });
+
+    // A Porra dos Botões //
+    secoes.forEach((secao, indice) => {
+        const botao = document.createElement("button");
+
+        botao.className = "botao-menu";
+        botao.type = "button";
+        botao.textContent = secao.titulo;
+
+        botao.addEventListener("click", () => {
+            abrirCapitulo(indice);
+        });
+
+        listaCapitulos.appendChild(botao);
+    });
+
+    // A Lista de Capítulos //
+    function abrirHistoria() {
+        inicio.hidden = true;
+        leitor.hidden = true;
+        sumario.hidden = false;
+    }
+
+    // Cada Capítulo e Parágrafo //
+    function abrirCapitulo(indice) {
+        const secao = secoes[indice];
+
+        conteudoCapitulo.innerHTML =
+            `<h2>${escaparHTML(secao.titulo)}</h2>` +
+            secao.paragrafos.map(paragrafo =>
+                `<p>${escaparHTML(paragrafo).replace(/\n/g, "<br>")}</p>`
+            ).join("");
+            
+            const avisoProximoCapitulo = document.getElementById("aviso-proximo-capitulo");
+            
+        if (indice === secoes.length - 1) {
+            avisoProximoCapitulo.innerHTML = `
+            <div class="proximo-capitulo">
+                <h3>Próximo capítulo em breve...</h3>
+                <p>Esta história continuará. Aguarde o próximo capítulo!</p>
+                
+                </div>
+                `;
+            } else {
+                avisoProximoCapitulo.innerHTML = "";
+            }
+
+        sumario.hidden = true;
+        inicio.hidden = true;
+        leitor.hidden = false;
+
+        const botaoAnterior = document.getElementById("capitulo-anterior");
+        const botaoProximo = document.getElementById("proximo-capitulo");
+
+        // Capítulo anterior //
+        if (indice > 0) {
+            botaoAnterior.textContent = "← " + secoes[indice - 1].titulo;
+            botaoAnterior.hidden = false;
+        } else {
+            botaoAnterior.hidden = true;
+        }
+        
+        // Próximo capítulo //
+        if (indice < secoes.length - 1) {
+            botaoProximo.textContent = secoes[indice + 1].titulo + " →";
+            botaoProximo.hidden = false;
+        } else {
+            botaoProximo.hidden = true;
+        }
+
+        window.scrollTo(0, 0);
+    
+    }
+
+    // Volta ao Inicio //
+    function voltarInicio() {
+        sumario.hidden = true;
+        leitor.hidden = true;
+        inicio.hidden = false;
+
+        window.scrollTo(0, 0);
+    }
+
+    // Volta ao sumário //
+    function voltarSumario() {
+        leitor.hidden = true;
+        inicio.hidden = true;
+        sumario.hidden = false;
+
+        window.scrollTo(0, 0);
+    }
+    
+    // Navegação //
+    document.getElementById("capitulo-anterior").addEventListener("click", () => {
+        abrirCapitulo(
+            secoes.findIndex(secao =>
+            secao.titulo === conteudoCapitulo.querySelector("h2").textContent
+        ) - 1
+    );
+});
+
+    document.getElementById("proximo-capitulo").addEventListener("click", () => {
+        abrirCapitulo(
+            secoes.findIndex(secao =>
+            secao.titulo === conteudoCapitulo.querySelector("h2").textContent
+        ) + 1
+    );
+});
+
+</script>
+
+<footer class="rodape-direitos">
+    <p>© 2026 — Decodificando Histórias</p>
+    <p>
+        Todos os direitos reservados. Reprodução ou publicação
+        das histórias sem autorização do autor não é permitida,
+        salvo nos casos previstos em lei.
+    </p>
+    <p>Autor: Luan do Nascimento Teixeira</p>
+</footer>
+
+</body>
+</html>
